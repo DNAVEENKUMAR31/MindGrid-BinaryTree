@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MindGrid — Unlock Your Potential</title>
   <link rel="icon" href="./Images/Logo.jpg" type="image/jpg" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -137,6 +138,8 @@
       font-weight: 800;
       box-shadow: 0 0 20px rgba(0, 183, 255, 0.3);
       transition: 0.3s;
+      /* IMPROVEMENT: Better button behavior for an anchor tag */
+      display: inline-block; 
     }
 
     .btn:hover {
@@ -151,6 +154,27 @@
       color: #81bfe8;
       opacity: 0.8;
       z-index: 1;
+    }
+    
+    /* IMPROVEMENT: Media Query for Responsiveness */
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 2.5rem;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            max-width: 90%;
+        }
+
+        .features {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .feature-box {
+            width: 85%;
+        }
     }
   </style>
 </head>
