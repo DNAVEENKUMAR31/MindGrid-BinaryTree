@@ -1,0 +1,342 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./Images/Logo.jpg">
+    <title>MindGrid Explained: How the Game Thinks</title>
+    <style>
+        /* General Setup & Custom Properties */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Poppins:wght@700&display=swap');
+        
+        :root {
+            --primary-color: #2c5282; /* Corporate Blue/Navy */
+            --secondary-color: #4c51bf; /* Deep Royal Purple */
+            --accent-color: #38b2ac; /* Teal Accent */
+            --background-color: #603ed2; /* Light App Background */
+            --card-background: #ffffff;
+            --text-dark: #2d3748;
+            --text-light: #4a5568;
+            --shadow-light: 0 4px 10px rgba(0, 0, 0, 0.05);
+            --shadow-deep: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- KEYFRAMES --- */
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulseBorder {
+            0% { box-shadow: 0 0 0 0px rgba(76, 81, 191, 0.2); }
+            100% { box-shadow: 0 0 0 6px rgba(76, 81, 191, 0); }
+        }
+        
+        @keyframes subtleBreathing {
+            0%, 100% { color: var(--secondary-color); text-shadow: 1px 1px 3px rgba(76, 81, 191, 0.1); }
+            50% { color: var(--primary-color); text-shadow: 1px 1px 5px rgba(44, 82, 130, 0.2); }
+        }
+
+        /* --- BASE STYLES --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.65;
+            margin: 0;
+            padding: 30px;
+            background-color: var(--background-color);
+            color: var(--text-light);
+            transition: opacity 1s ease-in-out;
+            opacity: 0;
+            animation: fadeIn 1s forwards; /* Initial Fade In */
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            font-size: 1.2rem;
+            background: var(--card-background);
+            padding: 50px;
+            border-radius: 24px;
+            box-shadow: var(--shadow-deep);
+            border-left: 6px solid var(--accent-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .container:hover {
+             transform: translateY(-3px);
+             box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Header Styling */
+        .header-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .app-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            background: var(--primary-color);
+            box-shadow: 0 8px 20px rgba(44, 82, 130, 0.4);
+            border: 4px solid var(--card-background);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .app-logo:hover {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3.2em;
+            margin: 0;
+            padding-bottom: 15px;
+            border-bottom: 4px solid var(--accent-color);
+            width: 90%;
+            max-width: 600px;
+            /* Applying subtle, professional animation to the main title */
+            animation: subtleBreathing 8s infinite alternate ease-in-out; 
+        }
+
+        /* Section Headings - Dynamic Entrance */
+        h2 {
+            color: var(--primary-color);
+            font-size: 2.2em;
+            margin-top: 45px;
+            border-left: 6px solid var(--secondary-color);
+            padding-left: 15px;
+            position: relative;
+            font-weight: 700;
+            transition: color 0.3s;
+            
+            /* Prepare for section slide-in */
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideInUp 0.8s forwards;
+            animation-delay: 0.2s; /* Staggered delay handled by data attributes in HTML */
+        }
+        h2:hover {
+            color: var(--accent-color);
+        }
+        h3 {
+            color: var(--text-dark);
+            font-size: 1.6em;
+            margin-top: 30px;
+            padding-bottom: 5px;
+        }
+
+        /* Tables (Modern Cards) */
+        .term-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 35px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            border: 1px solid #edf2f7;
+            transition: box-shadow 0.5s ease;
+        }
+        
+        .term-table:hover {
+            /* Highlight Pulse on Hover */
+            animation:infinite;
+             animation: pulseBorder 1.5s infinite; 
+        }
+
+        .term-table th, .term-table td {
+            padding: 18px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            transition: background-color 0.2s;
+             font-size: 1.3rem;
+        }
+
+        .term-table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 1.5rem;
+        }
+
+        .term-table tr:nth-child(even) {
+            background-color: #f7f9fb;
+        }
+        .term-table tr:hover {
+            background-color: #ebf4ff;
+        }
+        .term-table td:first-child {
+            font-weight: 700;
+            color: var(--secondary-color);
+            width: 25%;
+        }
+
+        /* Notes and Analogies (Alert Banners) */
+        .analogy, .note {
+            padding: 20px 25px;
+            margin: 30px 0;
+            font-size: 1.1rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+            
+            /* Animation for notes/analogies */
+            transform: scale(1);
+            transition: transform 0.3s ease;
+        }
+        .analogy:hover, .note:hover {
+            transform: scale(1.01);
+        }
+
+        .analogy {
+            background-color: #f0fff4; /* Light Green */
+            border: 2px solid #68d391;
+            color: #276749;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .note {
+            background-color: #ebf8ff; /* Light Blue */
+            border: 2px solid #63b3ed;
+            color: #2b6cb0;
+            font-style: italic;
+        }
+
+        /* List Styling */
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        ul li {
+            position: relative;
+            margin-bottom: 12px;
+            padding-left: 30px;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+        ul li:hover {
+            color: var(--secondary-color);
+            transform: translateX(5px);
+        }
+        ul li::before {
+            content: '🔹'; 
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-size: 1.2em;
+        }
+        
+        /* Paragraph Spacing */
+        p {
+            margin-bottom: 20px;
+            color: var(--text-light);
+        }
+
+        /* Strong Emphasis */
+        strong {
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-section">
+        <img src="./Images/Logo.jpg" alt="MindGrid Logo" class="app-logo">
+        <h1>MindGrid Explained: The Engine Room</h1>
+    </div>
+
+    <p>Welcome! This page helps you understand the **magic** behind our MindGrid game. It's built on a special kind of **Artificial Intelligence (AI)** that helps the computer play perfectly, like a super-smart little robot! We'll explain the code's concepts in simple steps.</p>
+
+    <div class="analogy">
+        Think of the game as a **Race 🏁**. The Human (X) wants to reach the finish line (Win) first, and the AI (O) wants to stop the Human by getting to its own finish line first. The AI uses a super-calculator to check all the roads!
+    </div>
+
+
+
+    <h2 style="animation-delay: 0.3s;">1. 🎲 Game Structure and Components</h2>
+    <p>These terms define the basic physical components and roles within the game.</p>
+    <table class="term-table">
+        <tr><th>Term</th><th>Simple Explanation</th><th>Role in the Game</th></tr>
+        <tr><td>**Cell** (0 to 8)</td><td>One single empty box on the grid.</td><td>It's where you put your 'X' or the computer puts its 'O'.</td></tr>
+        <tr><td>**Board**</td><td>The complete $3 \times 3$ grid, acting like a map.</td><td>The 'map' that keeps track of every 'X', 'O', or empty space.</td></tr>
+        <tr><td>**Win Combos**</td><td>The 8 secret lines (rows, columns, diagonals) that win the game.</td><td>The quick-check list the game uses to see if someone won instantly.</td></tr>
+        <tr><td>**Player (X)**</td><td>You! The human user.</td><td>You try to get the **highest score** (+10 is a win for you!).</td></tr>
+        <tr><td>**AI (O)**</td><td>The smart computer opponent.</td><td>It tries to give you the **lowest score** (-10 is a win for the computer!).</td></tr>
+    </table>
+
+    
+
+    <h2 style="animation-delay: 0.4s;">2. 🧠 Minimax: The AI's Decision Brain</h2>
+    <p>The Minimax Algorithm is the genius strategy the computer uses to choose the best move. It's like checking every possible future move before taking a single step.</p>
+
+    <div class="analogy">
+        The Minimax Algorithm is like a **GPS** 🗺️ for the game. Before turning left or right, it checks every route (even the super long ones!) to make sure the final route is the **best** one possible.
+    </div>
+
+    <table class="term-table">
+        <tr><th>Term</th><th>Simple Explanation</th><th>Focus</th></tr>
+        <tr><td>**Minimax Algorithm**</td><td>A special function that looks ahead at all possible game endings.</td><td>It **guarantees** the best possible move every time, assuming you play well too.</td></tr>
+        <tr><td>**Score**</td><td>A number (like points) given to a game ending.</td><td>**+10** for Human Win, **-10** for AI Win, **0** for Draw. The score also changes based on how *quickly* the game ends!</td></tr>
+        <tr><td>**Minimax Decision Tree**</td><td>The visual chart showing the current move (the root) and all the immediate moves the AI considered (the children).</td><td>Shows the player *why* the computer chose its move.</td></tr>
+        <tr><td>**Move Object**</td><td>A simple package that says: "Go to Cell **5**, and the final game **Score** will be **-9**."</td><td>The actual instruction set the computer follows to place its 'O'.</td></tr>
+    </table>
+
+    
+    
+    <h2 style="animation-delay: 0.5s;">3. 📂 Traversal & Searching: Data Management</h2>
+    <p>Once the AI finds all the possible future moves, it needs to organize and search them. These are basic computer science tools that help manage data.</p>
+
+    <h3>3.1. Traversal: Different Ways to Sort</h3>
+    <p>**Traversal** just means checking every move in a list, but organizing that list in different ways, like sorting toys by size, color, or shape.</p>
+    <table class="term-table">
+        <tr><th>Traversal Type</th><th>Simple Order</th><th>Why is it Sorted This Way?</th></tr>
+        <tr><td>**Preorder**</td><td>Default Order (Move 0, then 1, then 2...)</td><td>Lists moves based on the **Board Index**. It's the most basic, natural order.</td></tr>
+        <tr><td>**Inorder**</td><td>Sorted by **Worst Score** to **Best Score**.</td><td>Shows you the moves that lead to the *worst* outcome first, then the *best*.</td></tr>
+        <tr><td>**Postorder**</td><td>Sorted by **Best Score** to **Worst Score**.</td><td>Lists the AI's favorites first! The move it picked will be at the very top.</td></tr>
+    </table>
+
+    <h3>3.2. Searching: Finding a Specific Result</h3>
+    <p>The **Search for Score** button uses a **Linear Search** to find moves that lead to a specific result, like only finding moves that guarantee a Draw (Score 0).</p>
+    <ul>
+        <li>**How it Works:** You tell the game a score (like '0'). The game looks at the list one-by-one, saying, "Is this move a 0? Is this move a 0?"</li>
+        <li>**What it's for:** It helps you find all the paths that lead to a specific end—like a win, a loss, or a draw.</li>
+        <li>**Visual Feedback:** The move on the decision tree will **light up** 💡 when the search finds a match!</li>
+    </ul>
+    
+    
+    <h2 style="animation-delay: 0.6s;">4. 🔄 Control Functions: User Interface</h2>
+    <p>These are the basic buttons you see that control the game's flow.</p>
+    <table class="term-table">
+        <tr><th>Operation</th><th>What the Button Does</th><th>Impact</th></tr>
+        <tr><td>**Restart Game**</td><td>Runs the code function <code>resetGame()</code>.</td><td>Wipes the board clean so you can start over. **Note:** Your scores are saved!</td></tr>
+        <tr><td>**Difficulty Selector**</td><td>Changes the intelligence of the AI brain.</td><td>Lets you switch between **Perfect** (impossible to beat), **Normal** (a good challenge), and **Random** (easy and fun).</td></tr>
+    </table>
+
+    <div class="note">
+        <strong>A Note on Code:</strong> The game uses JavaScript (JS) to manage all these features. Tools like <code>filter</code> and <code>sort</code> are just JS commands that make the computer organize and search the moves super fast! 
+        <br><br>
+        **⚙️ Safety Net:** The main AI functions have **automatic safety checks** built in. This means that if the computer's deep thinking (**Minimax**) runs into a super-complicated problem or error, the game won't freeze. It has a **backup plan** to ensure the game keeps running smoothly!
+    </div>
+
+</div>
+
+</body>
+</html>

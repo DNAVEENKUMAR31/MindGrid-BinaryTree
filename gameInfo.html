@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindGrid — Game Info</title>
+  <link rel="icon" href="./Images/Logo.jpg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #1060b0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 20px;
+      color: #f8fafc;
+    }
+    .info-card {
+      background-color: #ffffff;
+      color: #1e293b;
+      border-radius: 20px;
+      font-size: 1.3rem;
+      padding: 32px;
+      max-width: 850px;
+      width: 100%;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+      border: 2px solid #c7d2fe;
+      margin-bottom: 40px;
+      transition: transform 0.3s ease;
+    }
+    .info-card:hover {
+      transform: scale(1.02);
+    }
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #1e40af;
+      margin-bottom: 10px;
+    }
+    .btn {
+      background: linear-gradient(90deg, #2563eb, #00e6e6);
+      color: white;
+      font-weight: 700;
+      font-size: 1.3rem;
+      padding: 14px 40px;
+      border-radius: 50px;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+    
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="text-center mb-8">
+    <img src="./Images/Logo.jpg" alt="MindGrid Logo" class="w-24 h-24 rounded-full mx-auto shadow-lg mb-4">
+    <h1 class="text-4xl font-extrabold text-white mb-2">MindGrid</h1>
+    <p class="text-blue-100 text-lg">Unlock Your Potential</p>
+  </div>
+
+  <!-- Info Section -->
+  <div class="info-card">
+    <h2 class="section-title">🎮 Game Overview</h2>
+    <p>
+      <strong>MindGrid</strong> is an intelligent Tic-Tac-Toe experience powered by the
+      <strong>Minimax Algorithm</strong>. It not only challenges your mind but also visualizes
+      the AI’s decision-making process in real time through a Binary Tree representation.
+    </p>
+  </div>
+
+  <div class="info-card">
+    <h2 class="section-title">📜 Rules & Gameplay</h2>
+    <ul class="list-disc list-inside space-y-2">
+      <li>The game is played on a 3×3 grid between <strong>you (X)</strong> and <strong>AI (O)</strong>.</li>
+      <li>Players take turns placing their mark in empty cells.</li>
+      <li>The first to align 3 marks horizontally, vertically, or diagonally wins.</li>
+      <li>If all 9 cells are filled without a winner, the game ends in a draw.</li>
+      <li>You can restart anytime using the <strong>Restart</strong> button.</li>
+    </ul>
+  </div>
+
+  <div class="info-card">
+    <h2 class="section-title">🧩 How the AI Thinks (Minimax Algorithm)</h2>
+    <p class="mb-3">
+      The AI simulates all possible moves using a Binary Tree structure where each node
+      represents a future game state. Each move is assigned a “score” based on the outcome:
+    </p>
+    <ul class="list-disc list-inside space-y-1">
+      <li><span class="font-semibold text-green-600">10 - depth</span> → Fast AI win (best score).</li>
+      <li><span class="font-semibold text-gray-600">0</span> → Draw or human win.</li>
+    </ul>
+    <p class="mt-3">
+      The AI always chooses the move with the highest score, unless you select a lower difficulty mode
+      where it intentionally makes less optimal choices.
+    </p>
+  </div>
+
+  <div class="info-card">
+    <h2 class="section-title">🏆 Scoring System</h2>
+    <ul class="list-disc list-inside space-y-1">
+      <li><strong>+1</strong> point for each win.</li>
+      <li><strong>0</strong> for a loss.</li>
+      <li>Draws are tracked separately.</li>
+      <li>Your total score is shown in the scoreboard at the top of the game screen.</li>
+    </ul>
+  </div>
+
+  <div class="info-card">
+    <h2 class="section-title">⚙️ Difficulty Modes</h2>
+    <ul class="list-disc list-inside space-y-2">
+      <li><strong>Perfect (Unbeatable):</strong> The AI always makes the optimal move.</li>
+      <li><strong>Normal (Balanced):</strong> The AI occasionally makes small mistakes.</li>
+      <li><strong>Random (Easy):</strong> The AI picks moves randomly.</li>
+    </ul>
+  </div>
+
+  <div class="mt-8">
+    <a href="mg.html" class="btn">Start Game</a>
+  </div>
+
+  <footer class="text-white/70 mt-10 text-sm">© 2025 MindGrid Labs | Designed for Intelligent Play</footer>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MindGrid — Unlock Your Potential</title>
+  <link rel="icon" href="./Images/Logo.jpg" type="image/jpg" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #091921, #01080d);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Moving background gradient effect */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(135deg, #00c6ff, #0072ff, #00eaff, #0088cc);
+      animation: bgMove 10s infinite linear;
+      opacity: 0.05;
+      z-index: 0;
+    }
+
+    @keyframes bgMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-50%, -50%); }
+    }
+
+    .content {
+      text-align: center;
+      z-index: 1;
+      padding: 20px;
+    }
+
+    .logo-container {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin: 0 auto 20px;
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+      animation: pulse 3s infinite alternate;
+    }
+
+    .logo-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    @keyframes pulse {
+      from { box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
+      to { box-shadow: 0 0 45px rgba(0, 255, 255, 0.7); }
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #00eaff;
+      margin-bottom: 8px;
+    }
+
+    .tagline {
+      font-size: 1.2rem;
+      color: #b5e3ff;
+      margin-bottom: 20px;
+    }
+
+    .description {
+      font-size: 1.5rem;
+      color: #cde8ff;
+      max-width: 600px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+    }
+
+    .features {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      flex-wrap: wrap;
+      margin-bottom: 50px;
+    }
+
+    .feature-box {
+      background: rgba(255, 255, 255, 0.05);
+      font-size: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 18px 28px;
+      border-radius: 15px;
+      backdrop-filter: blur(5px);
+      transition: 0.3s;
+    }
+
+    .feature-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+    }
+
+    .feature-box h3 {
+      color: #00eaff;
+      margin-bottom: 8px;
+      font-size: 1.5rem;
+    }
+
+    .feature-box p {
+      color: #b8daff;
+      font-size: 1.3rem;
+    }
+
+    .btn {
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      border: none;
+      color: white;
+      font-size: 1.3rem;
+      padding: 14px 40px;
+      border-radius: 50px;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 800;
+      box-shadow: 0 0 20px rgba(0, 183, 255, 0.3);
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+    }
+
+    footer {
+      position: absolute;
+      bottom: 10px;
+      font-size: 1.1rem;
+      color: #81bfe8;
+      opacity: 0.8;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <div class="logo-container">
+      <img src="./Images/Logo.jpg" alt="MindGrid Logo" />
+    </div>
+
+    <h1>MindGrid</h1>
+    <p class="tagline">Unlock Your Potential</p>
+    <p class="description">
+      MindGrid is an interactive logic-based game experience designed to boost your critical thinking,
+      enhance focus, and challenge your strategic mind. Compete against intelligent AI and track your
+      performance as you climb the grid of mastery.
+    </p>
+
+    <div class="features">
+      <div class="feature-box">
+        <h3>🧠 Train Logic</h3>
+        <p>Sharpen your reasoning with every move and decision.</p>
+      </div>
+      <div class="feature-box">
+        <h3>⚡ Boost Focus</h3>
+        <p>Engage your brain through intense, mindful gameplay.</p>
+      </div>
+      <div class="feature-box">
+        <h3>🤖 Challenge AI</h3>
+        <p>Compete with smart algorithms that adapt to your play style.</p>
+      </div>
+    </div>
+
+    <a href="gameInfo.html" class="btn">View Game Info</a>
+  </div>
+
+  <footer>© 2025 MindGrid Labs | Designed for Intelligent Play</footer>
+</body>
+</html>

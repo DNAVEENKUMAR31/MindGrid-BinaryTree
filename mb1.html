@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MindGrid - Original Game</title>
+<link rel="icon" href="./Images/Logo.jpg" />
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+body { font-family: 'Inter', sans-serif; background-color: #1a202c; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+.container { display: flex; flex-wrap: wrap; gap: 30px; max-width: 1200px; width: 100%; justify-content: center; }
+.game-board { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 8px; width: 330px; height: 330px; background-color: #4c51bf; box-shadow: 0 15px 30px rgba(0,0,0,0.5); border-radius: 16px; padding: 10px; }
+.cell { background-color: #fff; display: flex; justify-content: center; align-items: center; font-size: 4rem; font-weight: 900; cursor: pointer; transition: 0.15s; color: #333; border-radius: 8px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);}
+.cell:hover { background-color: #e5e7eb; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2);}
+.cell:active { transform: scale(0.95); box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);}
+.cell[data-player="X"] { color: #3b82f6; }
+.cell[data-player="O"] { color: #ef4444; }
+@keyframes flashGreen { 0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); } 50% { box-shadow: 0 0 10px 4px rgba(52, 211, 153, 0.8); } 100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); } }
+#tree-container { background-color: #f7f9fc; padding: 24px; border-radius: 20px; box-shadow: 0 12px 25px rgba(0,0,0,0.2); overflow-x: auto; min-width: 300px; max-width: 650px; flex-grow: 1; display: flex; flex-direction: column; align-items: center; }
+.minimax-tree-visual { display: flex; flex-direction: column; align-items: center; padding: 10px 0; width: 100%; }
+.tree-node-box { padding: 10px 20px; background-color: #ffffff; border: 1px solid #c3dafe; border-radius: 12px; font-weight: 700; margin-bottom: 25px; box-shadow: 6px 6px 12px rgba(0,0,0,0.05), -6px -6px 12px #ffffff; position: relative; z-index: 10; color: #2c5282; text-align: center; transition: all 0.3s; }
+.minimax-tree-visual > .tree-node-box::after { content: ''; position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); width: 3px; height: 25px; background-color: #6b7280; z-index: 5; border-radius: 2px; }
+.tree-children { display: flex; justify-content: center; width: 100%; position: relative; padding-top: 25px; margin-bottom: 10px; }
+.tree-children::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background-color: #6b7280; z-index: 5; }
+.move-branch { flex-grow: 1; display: flex; flex-direction: column; align-items: center; position: relative; padding: 0 5px; min-width: 80px; transition: all 0.3s ease; }
+.move-branch::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 3px; height: 25px; background-color: #6b7280; z-index: 6; }
+.move-node-label { padding: 8px 12px; font-size: 0.85rem; background: linear-gradient(145deg, #e2e8f0, #f8fafc); border: 1px solid #cbd5e0; border-radius: 8px; text-align: center; z-index: 10; color: #333; font-weight: 600; box-shadow: 2px 2px 5px rgba(0,0,0,0.05); transition: all 0.3s ease; }
+.move-node-label:hover { transform: scale(1.05); border-color: #4c51bf; }
+.best-move-path .move-node-label { background: #34d399; border-color: #10b981; color: white; font-weight: 800; animation: flashGreen 2s infinite alternate; }
+#tree-container button { transition: all 0.3s ease; }
+</style>
+</head>
+<body>
+
+<div class="text-center mb-8">
+    <h1 class="text-4xl font-extrabold text-white mb-2">MindGrid</h1>
+    <p class="text-gray-300">Unlock your Potential</p>
+</div>
+
+<div class="w-full max-w-lg mb-6 flex justify-around items-center bg-white p-4 rounded-xl shadow-lg border border-gray-100">
+    <div class="flex items-center space-x-2">
+        <span class="text-gray-600 font-semibold">Difficulty:</span>
+        <select id="difficulty-select" class="p-2 border border-gray-300 rounded-lg shadow-sm">
+            <option value="perfect">Perfect (Unbeatable)</option>
+            <option value="normal" selected>Normal (Balanced)</option>
+            <option value="random">Random (Easy)</option>
+        </select>
+    </div>
+    <button id="restart" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow-xl">Restart Game</button>
+</div>
+
+<div class="w-full max-w-lg mb-6 flex justify-center">
+    <a href="DetailedExplanation-MindGridOperations.html" target="_blank" class="block w-full text-center">
+        <button id="view-info-btn" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded-lg shadow-xl w-3/4 max-w-xs transition duration-150">
+            View More Info 📚
+        </button>
+    </a>
+</div>
+
+<div class="w-full max-w-lg mb-6 p-4 rounded-xl shadow-md bg-white flex justify-around font-semibold text-lg border border-gray-100">
+    <div><span id="player-name-label">Player</span> (X): <span id="player-score" class="text-blue-600">0</span></div>
+    <div>AI (O): <span id="ai-score" class="text-red-500">0</span></div>
+    <div>Draws: <span id="draw-score" class="text-gray-500">0</span></div>
+</div>
+
+<div class="container">
+    <div class="game-board">
+        <div class="cell" data-index="0"></div>
+        <div class="cell" data-index="1"></div>
+        <div class="cell" data-index="2"></div>
+        <div class="cell" data-index="3"></div>
+        <div class="cell" data-index="4"></div>
+        <div class="cell" data-index="5"></div>
+        <div class="cell" data-index="6"></div>
+        <div class="cell" data-index="7"></div>
+        <div class="cell" data-index="8"></div>
+    </div>
+
+    <div id="tree-container">
+        <h3 class="text-xl font-bold mb-3 text-gray-700">🧠 Minimax Decision Tree</h3>
+        <p id="tree-status" class="text-gray-500 text-sm mb-2">Game initializing...</p>
+    </div>
+</div>
+
+<script>
+// --- Player Name Setup ---
+let playerName = sessionStorage.getItem("playerName") || null;
+if (!playerName) {
+    playerName = prompt("Enter your name to start the game 👋:");
+    if (!playerName || playerName.trim() === "") playerName = "Player";
+    sessionStorage.setItem("playerName", playerName);
+}
+document.getElementById("player-name-label").textContent = playerName;
+
+// --- Game Variables ---
+let playerScore = 0, aiScore = 0, drawScore = 0;
+const cells = document.querySelectorAll(".cell");
+const restartBtn = document.getElementById("restart");
+const treeContainer = document.getElementById("tree-container");
+const playerScoreEl = document.getElementById("player-score");
+const aiScoreEl = document.getElementById("ai-score");
+const drawScoreEl = document.getElementById("draw-score");
+
+const board = Array(9).fill(null);
+const human = "X";
+const ai = "O";
+let gameActive = true;
+
+const winCombos = [
+    [0,1,2],[3,4,5],[6,7,8],
+    [0,3,6],[1,4,7],[2,5,8],
+    [0,4,8],[2,4,6]
+];
+
+// --- Modal ---
+function showInfoModal(title, message) {
+    document.getElementById('info-modal')?.remove();
+    const div = document.createElement("div");
+    div.id = "info-modal";
+    div.className = "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4";
+    div.innerHTML = `
+        <div class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full text-center">
+            <p class="text-xl font-extrabold mb-3 text-gray-900">${title}</p>
+            <pre class="text-left text-sm text-gray-700 bg-gray-50 p-3 rounded-lg overflow-x-auto whitespace-pre-wrap">${message}</pre>
+            <button id="close-info-modal" class="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-xl">Close</button>
+        </div>`;
+    document.body.appendChild(div);
+    document.getElementById("close-info-modal").addEventListener("click", () => div.remove());
+}
+
+// --- Traversals ---
+function getPreorderOutput(moves) {
+    let output = "--- Preorder (Natural Board Index Order) ---\n";
+    moves.forEach(m => output += `Move Index: ${m.index}, Score: ${m.score}\n`);
+    return output;
+}
+function getInorderOutput(moves) {
+    const sorted = [...moves].sort((a,b)=>a.score-b.score);
+    let output = "--- Inorder (Score: Worst to Best) ---\n";
+    sorted.forEach(m => output += `Move Index: ${m.index}, Score: ${m.score}\n`);
+    return output;
+}
+function getPostorderOutput(moves) {
+    const sorted = [...moves].sort((a,b)=>b.score-a.score);
+    let output = "--- Postorder (Score: Best to Worst) ---\n";
+    sorted.forEach(m => output += `Move Index: ${m.index}, Score: ${m.score}\n`);
+    return output;
+}
+function renderTraversalModal(moves) {
+    if (!moves.length) { showInfoModal("Traversal Operation", "No moves available."); return; }
+    const fullOutput = `${getPreorderOutput(moves)}\n${getInorderOutput(moves)}\n${getPostorderOutput(moves)}`;
+    console.log(fullOutput);
+    showInfoModal("Decision Node Traversal Operations", fullOutput);
+}
+
+// --- Search ---
+function demonstrateSearch(moves) {
+    const childrenContainer = treeContainer.querySelector(".tree-children");
+    if (!childrenContainer) return;
+    childrenContainer.querySelectorAll('.move-branch').forEach(b=>{b.style.outline='none'; b.style.boxShadow='none';});
+    const searchScore = prompt("Enter a score:");
+    if (searchScore===null||searchScore.trim()==="") return;
+    const target = parseInt(searchScore);
+    if (isNaN(target)) { showInfoModal("Search Error", "Invalid number"); return; }
+    const found = moves.filter(m=>m.score===target);
+    if (!found.length) { showInfoModal("Search Results", `No moves with score ${target}`); return; }
+    found.forEach(m=>{
+        const branch = childrenContainer.querySelector(`.move-branch[data-move-index="${m.index}"]`);
+        if (branch){ branch.style.outline='3px solid #ffcc00'; branch.style.boxShadow='0 0 10px #ffcc00';
+            setTimeout(()=>{branch.style.outline='none'; branch.style.boxShadow='none';},2000);}
+    });
+    showInfoModal(`Search Results for Score ${target}`, `Found ${found.length} move(s)`);
+}
+
+// --- Game Logic ---
+function setupEventListeners(){
+    cells.forEach(cell=>cell.addEventListener("click", ()=>{
+        const index = parseInt(cell.dataset.index);
+        if (!board[index] && gameActive){ makeMove(index,human); if(gameActive)setTimeout(aiTurn,100);}
+    }));
+    restartBtn.addEventListener("click", resetGame);
+}
+function makeMove(index,player){ board[index]=player; cells[index].textContent=player; cells[index].setAttribute("data-player",player); checkWinner(player);}
+function aiTurn(){
+    const avail = board.map((v,i)=>v===null?i:null).filter(v=>v!==null); if(!avail.length)return;
+    const result = minimax(board.slice(),ai,0,true);
+    const best = result.moves?.find(m=>m.score===result.score); if(!best)return;
+    renderMinimaxTree(result,best);
+    makeMove(best.index,ai);
+}
+function checkWinner(player){
+    let won=false;
+    for(let combo of winCombos){
+        const [a,b,c]=combo;
+        if(board[a] && board[a]===board[b] && board[a]===board[c]){ won=true; cells[a].style.backgroundColor=cells[b].style.backgroundColor=cells[c].style.backgroundColor="#fef08a"; gameActive=false; break;}
+    }
+    let msg=null;
+    if(won){ if(player===human){ playerScore++; msg=`${playerName} wins! 🎉`; } else { aiScore++; msg="AI wins! 🤖"; } }
+    else if(!board.includes(null)){ drawScore++; msg="It's a draw! 🤝"; gameActive=false; }
+    if(msg){ updateScoreboard(); showResult(msg); }
+}
+function showResult(message){
+    const div=document.createElement("div");
+    div.className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
+    div.innerHTML=`
+        <div class="bg-white p-8 rounded-xl shadow-2xl max-w-sm w-full text-center">
+            <p class="text-3xl font-extrabold mb-4 text-gray-900">${message}</p>
+            <div class="text-left text-gray-700 mt-4 border-t pt-3 space-y-2">
+                <p><b>${playerName}</b>: ${playerScore}</p>
+                <p><b>AI</b>: ${aiScore}</p>
+                <p>Draws: ${drawScore}</p>
+            </div>
+            <button id="close-result" class="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl">Play Again</button>
+        </div>`;
+    document.body.appendChild(div);
+    document.getElementById("close-result").addEventListener("click",()=>{ div.remove(); resetGame(); });
+}
+function updateScoreboard(){ playerScoreEl.textContent=playerScore; aiScoreEl.textContent=aiScore; drawScoreEl.textContent=drawScore; }
+function resetGame(){ board.fill(null); cells.forEach(c=>{c.textContent=""; c.style.backgroundColor="#fff"; c.removeAttribute("data-player");}); treeContainer.querySelector(".minimax-tree-visual")?.remove(); document.getElementById("tree-status").textContent="Start playing!"; gameActive=true; }
+
+// --- Minimax ---
+function minimax(newBoard,player,depth=0,isRoot=false){
+    const avail = newBoard.map((v,i)=>v===null?i:null).filter(v=>v!==null);
+    if(checkWinSimple(newBoard,human)) return {score:-10+depth};
+    if(checkWinSimple(newBoard,ai)) return {score:10-depth};
+    if(!avail.length) return {score:0};
+
+    const moves=[];
+    for(let i of avail){
+        newBoard[i]=player;
+        const result=minimax(newBoard,player===ai?human:ai,depth+1);
+        moves.push({index:i,score:result.score});
+        newBoard[i]=null;
+    }
+
+    let bestMove;
+    if(player===ai){ let max=-Infinity; moves.forEach(m=>{if(m.score>max){max=m.score; bestMove=m;}});}
+    else { let min=Infinity; moves.forEach(m=>{if(m.score<min){min=m.score; bestMove=m;}});}
+    return isRoot? {score:bestMove.score, moves}:{score:bestMove.score};
+}
+function checkWinSimple(b,p){ return winCombos.some(c=>c.every(i=>b[i]===p)); }
+
+// --- Render Tree ---
+function renderMinimaxTree(node,chosen){
+    treeContainer.querySelector(".minimax-tree-visual")?.remove();
+    const treeVisual=document.createElement("div"); treeVisual.className="minimax-tree-visual";
+    const rootNode=document.createElement("div"); rootNode.className="tree-node-box";
+    rootNode.innerHTML=`Root Node | AI's Turn (<b>${ai}</b>) | Minimax Run`;
+    treeVisual.appendChild(rootNode);
+
+    const controls=document.createElement("div"); controls.className="flex space-x-4 mt-6 justify-center w-full";
+    controls.innerHTML=`<button id="traverse-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-xl">Traverse Moves</button>
+    <button id="search-btn" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded-xl">Search for Score</button>`;
+    treeVisual.appendChild(controls);
+
+    const childrenContainer=document.createElement("div"); childrenContainer.className="tree-children";
+    node.moves?.forEach(m=>{
+        const branch=document.createElement("div"); branch.className="move-branch"; branch.dataset.moveIndex=m.index;
+        if(chosen && m.index===chosen.index) branch.classList.add("best-move-path");
+        branch.innerHTML=`<div class="move-node-label">Move ${m.index}<br>Score: <b>${m.score}</b></div>`;
+        childrenContainer.appendChild(branch);
+    });
+    if(node.moves?.length>0) treeVisual.appendChild(childrenContainer);
+    treeContainer.appendChild(treeVisual);
+    document.getElementById("tree-status").textContent=chosen? `✅ AI chose move ${chosen.index} (Score: ${chosen.score})` : "Tree ready";
+
+    document.getElementById('traverse-btn').addEventListener('click',()=>renderTraversalModal(node.moves));
+    document.getElementById('search-btn').addEventListener('click',()=>demonstrateSearch(node.moves));
+}
+
+setupEventListeners();
+document.getElementById("tree-status").textContent="Start playing!";
+</script>
+
+</body>
+</html>
