@@ -1,2 +1,22 @@
-# MindGrid-BinaryTree
-MindGrid is a TicTacToe game built using binary tree logic, allowing players to visualize moves and decision paths. Developed with HTML, CSS, and JavaScript, it offers interactive gameplay while demonstrating how a binary tree structures and determines each move.
+# MindGrid
+
+**MindGrid** is a TicTacToe game built using **binary tree logic**, allowing players to visualize moves and decision paths in real-time. Developed with **HTML, CSS, and JavaScript**, it combines fun gameplay with a demonstration of tree-based decision-making.
+
+## Features
+- Interactive TicTacToe gameplay
+- Moves structured using **binary tree logic**
+- Visualize game decisions and paths
+- Built with **HTML, CSS, and JavaScript**
+
+## Usage
+1. Open `index.html` in a browser.
+2. Play TicTacToe against another player.
+3. Observe the binary tree logic behind each move.
+
+## Technologies Used
+- **HTML**: Game structure
+- **CSS**: Styling and layout
+- **JavaScript**: Game logic and binary tree implementation
+
+## License
+This project is open-source and free to use.
