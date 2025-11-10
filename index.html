@@ -6,177 +6,196 @@
   <title>MindGrid — Unlock Your Potential</title>
   <link rel="icon" href="./Images/Logo.jpg" type="image/jpg" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "Poppins", sans-serif;
-    }
+ <style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
 
-    body {
-      height: 100vh;
-      color: #fff;
-      display: flex;
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background: radial-gradient(circle at top, #091921, #01080d);
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Moving background gradient */
+  body::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, #00c6ff, #0072ff, #00eaff, #0088cc);
+    animation: bgMove 15s linear infinite;
+    opacity: 0.05;
+    z-index: 0;
+  }
+
+  @keyframes bgMove {
+    0% { transform: rotate(0deg) translate(0, 0); }
+    100% { transform: rotate(360deg) translate(0, 0); }
+  }
+
+  .content {
+    text-align: center;
+    z-index: 1;
+    padding: 30px 20px;
+  }
+
+  .logo-container {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 25px;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.5), 0 0 50px rgba(0, 200, 255, 0.3);
+    animation: pulse 3s infinite alternate;
+    transition: transform 0.3s;
+  }
+
+  .logo-container:hover {
+    transform: scale(1.1);
+  }
+
+  .logo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @keyframes pulse {
+    from { box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
+    to { box-shadow: 0 0 50px rgba(0, 255, 255, 0.7); }
+  }
+
+  h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #00eaff;
+    text-shadow: 0 0 10px #00eaff, 0 0 20px #00c6ff;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+  }
+
+  .tagline {
+    font-size: 1.3rem;
+    color: #a0dfff;
+    margin-bottom: 20px;
+    text-shadow: 0 0 6px rgba(0, 230, 255, 0.6);
+  }
+
+  .description {
+    font-size: 1.3rem;
+    color: #cde8ff;
+    max-width: 650px;
+    margin: 0 auto 45px;
+    line-height: 1.7;
+    text-shadow: 0 0 2px rgba(0, 200, 255, 0.4);
+  }
+
+  .features {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+  }
+
+  .feature-box {
+    background: rgba(255, 255, 255, 0.05);
+    font-size: 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 22px 30px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    transition: 0.3s;
+    min-width: 220px;
+    max-width: 280px;
+    cursor: default;
+    box-shadow: 0 0 15px rgba(0, 200, 255, 0.1);
+  }
+
+  .feature-box:hover {
+    transform: translateY(-7px) scale(1.03);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.4), 0 0 50px rgba(0, 200, 255, 0.3);
+    border-color: rgba(0, 255, 255, 0.3);
+  }
+
+  .feature-box h3 {
+    color: #00eaff;
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+    text-shadow: 0 0 8px #00eaff;
+  }
+
+  .feature-box p {
+    color: #b8daff;
+    font-size: 1.1rem;
+    line-height: 1.5;
+  }
+
+  .btn {
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    border: none;
+    color: white;
+    padding: 16px 45px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 800;
+    text-decoration: none;
+    font-size: 1.15rem;
+    box-shadow: 0 0 20px rgba(0, 183, 255, 0.4), 0 0 40px rgba(0, 200, 255, 0.2);
+    transition: 0.3s;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 0 35px rgba(0, 255, 255, 0.7), 0 0 60px rgba(0, 200, 255, 0.4);
+  }
+
+  footer {
+    position: absolute;
+    bottom: 10px;
+    font-size: 1rem;
+    color: #81bfe8;
+    opacity: 0.8;
+    z-index: 1;
+    text-align: center;
+    width: 100%;
+    letter-spacing: 0.5px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2.5rem;
+    }
+    .description {
+      font-size: 1.1rem;
+      max-width: 90%;
+    }
+    .features {
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      background: radial-gradient(circle at top, #091921, #01080d);
-      overflow: hidden;
-      position: relative;
     }
-
-    /* Moving background gradient effect */
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(135deg, #00c6ff, #0072ff, #00eaff, #0088cc);
-      animation: bgMove 10s infinite linear;
-      opacity: 0.05;
-      z-index: 0;
-    }
-
-    @keyframes bgMove {
-      0% { transform: translate(0, 0); }
-      100% { transform: translate(-50%, -50%); }
-    }
-
-    .content {
-      text-align: center;
-      z-index: 1;
-      padding: 20px;
-    }
-
-    .logo-container {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      overflow: hidden;
-      margin: 0 auto 20px;
-      box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
-      animation: pulse 3s infinite alternate;
-    }
-
-    .logo-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    @keyframes pulse {
-      from { box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
-      to { box-shadow: 0 0 45px rgba(0, 255, 255, 0.7); }
-    }
-
-    h1 {
-      font-size: 3rem;
-      font-weight: 700;
-      color: #00eaff;
-      margin-bottom: 8px;
-    }
-
-    .tagline {
-      font-size: 1.2rem;
-      color: #b5e3ff;
-      margin-bottom: 20px;
-    }
-
-    .description {
-      font-size: 1.5rem;
-      color: #cde8ff;
-      max-width: 600px;
-      margin: 0 auto 40px;
-      line-height: 1.6;
-    }
-
-    .features {
-      display: flex;
-      justify-content: center;
-      gap: 25px;
-      flex-wrap: wrap;
-      margin-bottom: 50px;
-    }
-
     .feature-box {
-      background: rgba(255, 255, 255, 0.05);
-      font-size: 1.4rem;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 18px 28px;
-      border-radius: 15px;
-      backdrop-filter: blur(5px);
-      transition: 0.3s;
+      width: 85%;
     }
+  }
+</style>
 
-    .feature-box:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-    }
-
-    .feature-box h3 {
-      color: #00eaff;
-      margin-bottom: 8px;
-      font-size: 1.4rem;
-    }
-
-    .feature-box p {
-      color: #b8daff;
-      font-size: 1.2rem;
-    }
-
-    .btn {
-      background: linear-gradient(90deg, #00c6ff, #0072ff);
-      border: none;
-      color: white;
-      padding: 14px 40px;
-      border-radius: 50px;
-      cursor: pointer;
-      text-decoration: none;
-      font-weight: 800;
-      box-shadow: 0 0 20px rgba(0, 183, 255, 0.3);
-      transition: 0.3s;
-      /* IMPROVEMENT: Better button behavior for an anchor tag */
-      display: inline-block; 
-    }
-
-    .btn:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
-    }
-
-    footer {
-      position: absolute;
-      bottom: 10px;
-      font-size: 1.1rem;
-      color: #81bfe8;
-      opacity: 0.8;
-      z-index: 1;
-    }
-    
-    /* IMPROVEMENT: Media Query for Responsiveness */
-    @media (max-width: 768px) {
-        h1 {
-            font-size: 2.5rem;
-        }
-
-        .description {
-            font-size: 1.1rem;
-            max-width: 90%;
-        }
-
-        .features {
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .feature-box {
-            width: 85%;
-        }
-    }
-  </style>
 </head>
 <body>
   <div class="content">
